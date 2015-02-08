@@ -9,20 +9,15 @@ def main_page(request):
 
 def logout_page(request):
     logout(request)
-    return HttpResponseRedirect('/login')
+    return HttpResponseRedirect('/')
 
-def register_page(request):
+def register_user(request):
+
     if request.method == 'POST':
-        form = RegistrationForm(request.POST)
+        form = RegistrationForm(request.POST)     # create form object
         if form.is_valid():
-            user = User.objects.create_user(
-                username=form.cleaned_data['username'],
-                password=form.cleaned_data['password1'],
-                email=form.cleaned_data['email']
-        )
-        return HttpResponseRedirect('/login')
+            form.save()
+            return HttpResponseRedirect('/')
     else:
         form = RegistrationForm()
-
-    return render(request,'registration/register.html',{'form':form})
-
+    return render(request, 'registration/register.html', {'form':form})
